@@ -2,7 +2,7 @@
 DChat is a straightforward Discord chat overlay designed for use with OBS and other similar software.
 
 ### Configuration Guide
-To get started, you'll need to create a Discord bot. Go to https://discord.com/developers/applications and click on "New Application."
+To get started, you'll need to create a Discord bot. Go to [Discord Dev Portal](https://discord.com/developers/applications) and click on "New Application."
 
 ### Bot Configuration
 In the "Bot" tab of your application, check the following two options:
