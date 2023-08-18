@@ -58,14 +58,16 @@ function handleAttachments(attachments) {
   
 function handleText(content) {
     const regex = /<([^>]+)>/g;
-    const splitted = content.split(regex).map(part => part.trim());
+    const splitted = content.split(regex).map(part => part.trim()).filter(part => part !== '');
     const text = [];
+
+    const allAreEmotes = splitted.every(part => /^:\w+:\d+$/.test(part));
   
     for (const part of splitted) {
       if (/^:\w+:\d+$/.test(part)) {
         const id = part.match(/:(\d+)/)[1];
         const emoteUrl = `https://cdn.discordapp.com/emojis/${id}.webp`;
-        text.push(<img src={emoteUrl} alt={part} className="emote" />);
+        text.push(<img src={emoteUrl} alt={part} className="emote" style={allAreEmotes ? {height: '3.5rem',width: '3.5rem'} : {}}/>);
       } else {
         text.push(<>{part}</>);
       }
