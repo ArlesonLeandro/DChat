@@ -6,12 +6,8 @@
   "author": {
     "name": "Arleson Leandro"
   },
-  "description":"aaaa",
   "scripts": {
-    "build:client": "esbuild src/index.js --bundle --outfile=public/bundle.js --loader:.js=jsx",
-    "build:server": "esbuild src/server/server.js --bundle --outfile=public/server.js  --platform=node --loader:.js=jsx",
-    "build:electron": "electron-packager .",
-    "build": "npm run build:client && npm run build:server",
+    "build": "esbuild src/index.js --bundle --outfile=public/bundle.js --loader:.js=jsx",
     "start:server": "node public/server.js",
     "start": "electron .",
     "dev": "npm run build && npm run start",
@@ -20,7 +16,7 @@
   "build": {
     "appId": "com.dchat.arleson",
     "productName": "DChat",
-    "icon":"public/DChat.ico",
+    "icon": "public/DChat.ico",
     "files": [
       "public/**/*"
     ]
@@ -34,11 +30,11 @@
     "socket.io-client": "^4.6.2"
   },
   "devDependencies": {
+    "electron": "^25.2.0",
+    "electron-builder": "^24.6.3",
+    "esbuild": "^0.18.12",
     "install": "^0.13.0",
     "npm": "^9.7.2",
-    "electron-builder": "^24.6.3",
-    "electron": "^25.2.0",
-    "esbuild": "^0.18.12",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.14.1"

@@ -23480,37 +23480,6 @@
     }
   });
 
-  // node_modules/react-dom/client.js
-  var require_client = __commonJS({
-    "node_modules/react-dom/client.js"(exports) {
-      "use strict";
-      var m = require_react_dom();
-      if (false) {
-        exports.createRoot = m.createRoot;
-        exports.hydrateRoot = m.hydrateRoot;
-      } else {
-        i2 = m.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
-        exports.createRoot = function(c, o) {
-          i2.usingClientEntryPoint = true;
-          try {
-            return m.createRoot(c, o);
-          } finally {
-            i2.usingClientEntryPoint = false;
-          }
-        };
-        exports.hydrateRoot = function(c, h, o) {
-          i2.usingClientEntryPoint = true;
-          try {
-            return m.hydrateRoot(c, h, o);
-          } finally {
-            i2.usingClientEntryPoint = false;
-          }
-        };
-      }
-      var i2;
-    }
-  });
-
   // src/utilities.js
   var require_utilities = __commonJS({
     "src/utilities.js"(exports, module) {
@@ -23569,8 +23538,6 @@
         const splitted = content.split(regex).map((part) => part.trim()).filter((part) => part !== "");
         const text = [];
         const allAreEmotes = splitted.every((part) => /^:\w+:\d+$/.test(part));
-        console.log(splitted);
-        console.log(allAreEmotes);
         for (const part of splitted) {
           if (/^:\w+:\d+$/.test(part)) {
             const id = part.match(/:(\d+)/)[1];
@@ -23588,7 +23555,7 @@
 
   // src/index.js
   var React6 = __toESM(require_react());
-  var import_client = __toESM(require_client());
+  var import_react_dom = __toESM(require_react_dom());
 
   // node_modules/react-router-dom/dist/index.js
   var React2 = __toESM(require_react());
@@ -28600,9 +28567,9 @@
   }
 
   // src/index.js
-  import_client.default.hydrateRoot(
-    document.getElementById("root"),
-    /* @__PURE__ */ React6.createElement(React6.StrictMode, null, /* @__PURE__ */ React6.createElement(BrowserRouter, null, /* @__PURE__ */ React6.createElement(App, null)))
+  import_react_dom.default.render(
+    /* @__PURE__ */ React6.createElement(React6.StrictMode, null, /* @__PURE__ */ React6.createElement(BrowserRouter, null, /* @__PURE__ */ React6.createElement(App, null))),
+    document.getElementById("root")
   );
 })();
 /*! Bundled license information:
