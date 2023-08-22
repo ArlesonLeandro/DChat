@@ -125,8 +125,8 @@ function Interface(props){
     return(
         <div>
             <TitleBar handleButtonClick={handleButtonClick}/>
-            <div style={{display:'flex'}} className='interface' >
-                <ul id='feed'>
+            <div style={{display:'flex', maxHeight:'100vh', height:'calc(100vh - 1.5rem)', maxWidth:'100vw', overflowY:'scroll'}} className='interface' >
+                <ul id='feed' style={{overflowX:'clip', maxHeight:'calc(100vh - 1.5rem)',Height:'calc(100vh - 2rem)'}} >
                     {messages}
                     <div style={{height: '1rem'}} ref={ref} />
                 </ul>
