@@ -1,4 +1,4 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, ipcMain } = require('electron')
 const path = require('path')
 const fs = require('fs')
 
@@ -18,8 +18,6 @@ fs.readFile('data.json', (err, data) =>{
     token: d.token,
     targetChannel: d.channelId
   })
-
-  console.log(d.channel_id)
   
   b.login(d.token)
 })
@@ -32,12 +30,25 @@ const createWindow = () => {
     height: 600,
     minWidth: 600,
     minHeight: 600,
-    icon: path.resolve(__dirname, "./DChat.ico"),
+    frame:false,
+    icon: path.join(__dirname, "./DChat.ico"),
     autoHideMenuBar: true,
-    backgroundColor: '#313338'
+    backgroundColor: '#313338',
+    webPreferences:{
+      preload: path.join(__dirname, 'preload.js')
+    }
   })
 
   mainWindow.loadURL("http://localhost:5000/interface")
+
+
+  ipcMain.on("close",() =>{
+    app.quit()
+  })
+  
+  ipcMain.on("minimize",() =>{
+    mainWindow.minimize()
+  })
 }
 
 app.whenReady().then(() => {
@@ -53,3 +64,4 @@ app.whenReady().then(() => {
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit()
 })
+

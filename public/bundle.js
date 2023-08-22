@@ -25414,6 +25414,19 @@
   function MBox2(props) {
     return /* @__PURE__ */ import_react2.default.createElement("li", { key: props.messageId }, /* @__PURE__ */ import_react2.default.createElement("img", { className: "avatar", src: props.avatar }), /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("h3", { className: "username", style: { color: props.color } }, props.name), /* @__PURE__ */ import_react2.default.createElement("div", { className: "content" }, props.text, props.imgs, props.attachmentElements)));
   }
+  function TitleBar(props) {
+    function minimize(event) {
+      console.log(event);
+      console.log(window.api);
+      window.api.minimize();
+    }
+    function close(event) {
+      console.log(event);
+      console.log(window.api);
+      window.api.close();
+    }
+    return /* @__PURE__ */ import_react2.default.createElement("div", { id: "title" }, /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("button", { id: "configButton", onClick: props.handleButtonClick, style: { margin: 0, width: "2.5rem", height: "1.5rem", borderRadius: "0" } }, "\u2630")), /* @__PURE__ */ import_react2.default.createElement("div", { id: "drag" }), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: "flex" } }, /* @__PURE__ */ import_react2.default.createElement("button", { onClick: window.api ? minimize : null, style: { margin: 0, width: "2.5rem", height: "1.5rem", borderRadius: "0" } }, "\u2212"), /* @__PURE__ */ import_react2.default.createElement("button", { onClick: window.api ? close : null, style: { margin: 0, width: "2.5rem", height: "1.5rem", borderRadius: "0" } }, "\u2716")));
+  }
   function Interface(props) {
     const [messages, setMessages] = (0, import_react2.useState)([]);
     const [isButtonClicked, setIsButtonClicked] = (0, import_react2.useState)(false);
@@ -25454,13 +25467,15 @@
       setMessages([...messages.slice(-99), newElement]);
     }
     function handleButtonClick(event) {
+      if (event.target.id == "configButton") {
+        setIsButtonClicked(!isButtonClicked);
+      }
+      if (!isButtonClicked) {
+        props.socket.emit("configData", "get");
+      }
       if (event.target.id == "darkBackground") {
         setIsButtonClicked(false);
         return;
-      }
-      if (event.target.id == "configButton") {
-        props.socket.emit("configData", "get");
-        setIsButtonClicked(true);
       }
     }
     function handleConfigSubmit(event) {
@@ -25472,7 +25487,7 @@
       };
       props.socket.emit("configData", data);
     }
-    return /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: "flex" }, className: "interface" }, /* @__PURE__ */ import_react2.default.createElement("ul", { id: "feed" }, messages, /* @__PURE__ */ import_react2.default.createElement("div", { style: { height: "1rem" }, ref })), /* @__PURE__ */ import_react2.default.createElement("button", { id: "configButton", type: "button", onClick: handleButtonClick, style: { position: "fixed", right: "0.5rem", top: "0.5rem", margin: "0" } }), /* @__PURE__ */ import_react2.default.createElement("div", { id: `${isButtonClicked ? "darkBackground" : ""}`, style: { position: "fixed" }, onClick: handleButtonClick }, /* @__PURE__ */ import_react2.default.createElement("form", { id: "config", style: isButtonClicked ? { display: "block" } : { display: "none" }, onSubmit: handleConfigSubmit }, /* @__PURE__ */ import_react2.default.createElement("input", { type: "text", name: "token", placeholder: "Token", defaultValue: configData ? configData.token : "" }), /* @__PURE__ */ import_react2.default.createElement("input", { type: "text", name: "channel", placeholder: "Channel", defaultValue: configData ? configData.channelId : "" }), /* @__PURE__ */ import_react2.default.createElement("button", { type: "submit" }, "Apply"))));
+    return /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement(TitleBar, { handleButtonClick }), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: "flex" }, className: "interface" }, /* @__PURE__ */ import_react2.default.createElement("ul", { id: "feed" }, messages, /* @__PURE__ */ import_react2.default.createElement("div", { style: { height: "1rem" }, ref })), /* @__PURE__ */ import_react2.default.createElement("div", { id: `${isButtonClicked ? "darkBackground" : ""}`, style: { position: "fixed" }, onClick: handleButtonClick }, /* @__PURE__ */ import_react2.default.createElement("form", { id: "config", style: isButtonClicked ? { display: "block" } : { display: "none" }, onSubmit: handleConfigSubmit }, /* @__PURE__ */ import_react2.default.createElement("input", { type: "text", name: "token", placeholder: "Token", defaultValue: configData ? configData.token : "" }), /* @__PURE__ */ import_react2.default.createElement("input", { type: "text", name: "channel", placeholder: "Channel", defaultValue: configData ? configData.channelId : "" }), /* @__PURE__ */ import_react2.default.createElement("button", { type: "submit" }, "Apply")))));
   }
   var Interface_default = Interface;
 

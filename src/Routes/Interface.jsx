@@ -16,6 +16,34 @@ function MBox(props){
     )
 }
 
+function TitleBar(props){
+
+    function minimize(event){
+        console.log(event)
+        console.log(window.api)
+        window.api.minimize()
+    }
+
+    function close(event){
+        console.log(event)
+        console.log(window.api)
+        window.api.close()
+    }
+
+    return(
+        <div id='title'>
+            <div>
+                <button id='configButton'  onClick={props.handleButtonClick} style={{margin: 0, width:'2.5rem', height:'1.5rem', borderRadius:'0'}}>&#x2630;</button>
+            </div>
+            <div id='drag' ></div>
+            <div style={{display:'flex'}}>
+                <button onClick={window.api ? minimize : null} style={{margin: 0, width:'2.5rem', height:'1.5rem', borderRadius:'0'}}>&minus;</button>
+                <button onClick={window.api ? close : null} style={{margin: 0, width:'2.5rem', height:'1.5rem', borderRadius:'0'}}>&#10006;</button>
+            </div>
+        </div>
+    )
+}
+
 function Interface(props){
     const [messages, setMessages] = useState([]);
     const [isButtonClicked, setIsButtonClicked] = useState(false);
@@ -69,15 +97,18 @@ function Interface(props){
     }
 
     function handleButtonClick(event){
+        if (event.target.id == 'configButton'){
+            setIsButtonClicked(!isButtonClicked)
+        }
+        
+        if (!isButtonClicked){
+            props.socket.emit('configData', 'get')
+        }
+        
         if (event.target.id == 'darkBackground'){
             setIsButtonClicked(false)
             return
         }
-        if (event.target.id == 'configButton'){
-            props.socket.emit('configData', 'get')
-            setIsButtonClicked(true)
-        }
-
     }
 
     function handleConfigSubmit(event){
@@ -92,20 +123,22 @@ function Interface(props){
     }
 
     return(
-        <div style={{display:'flex'}} className='interface' >
-            <ul id='feed'>
-                {messages}
-                <div style={{height: '1rem'}} ref={ref} />
-            </ul>
-            <button id='configButton' type="button" onClick={handleButtonClick} style={{position: 'fixed', right:'0.5rem', top:'0.5rem', margin:'0'}} />
-            <div id={`${isButtonClicked ? 'darkBackground' : ''}`} style={{position:'fixed'}} onClick={handleButtonClick}>
-                <form id='config' style={isButtonClicked ? {display : 'block'} : {display : 'none'}} onSubmit={handleConfigSubmit} >
-                    <input type="text" name='token' placeholder='Token' defaultValue={configData ? configData.token : ''} />
-                    <input type="text" name='channel' placeholder='Channel' defaultValue={configData? configData.channelId : ''} />
-                    <button type="submit">Apply</button> 
-                </form>
-            </div>
-        </div>    
+        <div>
+            <TitleBar handleButtonClick={handleButtonClick}/>
+            <div style={{display:'flex'}} className='interface' >
+                <ul id='feed'>
+                    {messages}
+                    <div style={{height: '1rem'}} ref={ref} />
+                </ul>
+                <div id={`${isButtonClicked ? 'darkBackground' : ''}`} style={{position:'fixed'}} onClick={handleButtonClick}>
+                    <form id='config' style={isButtonClicked ? {display : 'block'} : {display : 'none'}} onSubmit={handleConfigSubmit} >
+                        <input type="text" name='token' placeholder='Token' defaultValue={configData ? configData.token : ''} />
+                        <input type="text" name='channel' placeholder='Channel' defaultValue={configData? configData.channelId : ''} />
+                        <button type="submit">Apply</button> 
+                    </form>
+                </div>
+            </div>    
+        </div>
     )       
 }
 
