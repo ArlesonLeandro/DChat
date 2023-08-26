@@ -55,6 +55,7 @@ class Bot{
                 'nickname': message.member.nickname,
                 'color': message.member.displayHexColor,
                 'messageId': message.id,
+                'reference': message.reference,
                 'attachments': message.attachments.map(
                     attachment => ({
                         "url":attachment.url,

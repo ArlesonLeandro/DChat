@@ -1,10 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 function MBox(props){
+
+    console.log(props.replyMap ? props.replyMap.text: null)
     return(
         <li key={props.messageId} >
             <img className='avatar' src={props.avatar}/>
             <div>
+                <div style={{display:'flex',margin:0, marginLeft:'1rem',fontSize:'0.8rem', opacity:0.8, alignItems:'center'}}>
+                    {props.replyMap ? <h3 style={{color:props.color, margin:0, marginRight:'0.5rem', minWidth:'max-content'}}>{props.replyMap.name}</h3>:null}
+                    {props.replyMap ? <div className='reply'>{props.replyMap.text.props.children}</div> : null}
+                    {/* {props.replyMap ? props.replyMap.text.id = 'teste':null} */}
+                </div>
+                {/* {props.referenceMap} */}
+                {/* {props.reference ? <h3 style={{maring:0, marginLeft:'0.5rem',fontSize:'0.8rem'}}>{props.reference.messageId}</h3>:null} */}
                 <h3 className='username' style={{color: props.color}}>{props.name}</h3>
                 <div className='content'>
                     {props.text}
@@ -19,14 +28,10 @@ function MBox(props){
 function TitleBar(props){
 
     function minimize(event){
-        console.log(event)
-        console.log(window.api)
         window.api.minimize()
     }
 
     function close(event){
-        console.log(event)
-        console.log(window.api)
         window.api.close()
     }
 
@@ -77,18 +82,25 @@ function Interface(props){
         const { updatedContent, imgs } = props.handleURLs(data.cleanContent);
         const attachmentElements = props.handleAttachments(data.attachments);
         const text = props.handleText(updatedContent);
+        const messageId = data.messageId
+        const reference = data.reference
     
-        console.log(data)
+        const referenceMap = reference ? messages.find((map) => map['key'] === reference.messageId) : null
+        const replyMap = reference && referenceMap ? {'name': referenceMap.props.name, 'color': referenceMap.props.color, 'text': referenceMap.props.text} : null
 
         const newElement = (
           <MBox
+            key={data.messageId}
             name={name}
             color={nickColor}
             avatar={avatarUrl}
             text={text}
             imgs={imgs}
             attachmentElements={attachmentElements}
-            messageId={data.messageId}
+            messageId={messageId}
+            replyMap={replyMap}
+            referenceMap={referenceMap}
+            reference={reference}
           />
         );
     

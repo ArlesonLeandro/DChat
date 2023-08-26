@@ -12,6 +12,7 @@ function Overlay(props) {
     const attachmentElements = props.handleAttachments(data.attachments);
     const text = props.handleText(updatedContent);
     const messageId = data.messageId
+    const reference = data.reference
 
     const newElement = (
       <MBox
@@ -24,6 +25,7 @@ function Overlay(props) {
         attachmentElements={attachmentElements}
         timeout={10000}
         messageId={messageId}
+        reference={reference}
       />
     );
 
@@ -65,7 +67,7 @@ function Expire(props) {
 
 
 function MBox(props) {
-  const { avatar, username, color, text, imgs, attachmentElements, timeout, messageId } = props;
+  const { avatar, username, color, text, imgs, attachmentElements, timeout, messageId, reference } = props;
 
   return (
     <Expire className='message' messageId={messageId} delay={timeout}>

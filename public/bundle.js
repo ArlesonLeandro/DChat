@@ -25366,6 +25366,7 @@
       const attachmentElements = props.handleAttachments(data.attachments);
       const text = props.handleText(updatedContent);
       const messageId = data.messageId;
+      const reference = data.reference;
       const newElement = /* @__PURE__ */ import_react.default.createElement(
         MBox,
         {
@@ -25377,7 +25378,8 @@
           imgs,
           attachmentElements,
           timeout: 1e4,
-          messageId
+          messageId,
+          reference
         }
       );
       setMessages([newElement, ...messages]);
@@ -25404,25 +25406,22 @@
     return visible ? /* @__PURE__ */ import_react.default.createElement("li", { key: props.messageId, className: props.className }, props.children) : null;
   }
   function MBox(props) {
-    const { avatar, username, color, text, imgs, attachmentElements, timeout, messageId } = props;
-    return /* @__PURE__ */ import_react.default.createElement(Expire, { className: "message", messageId, delay: timeout }, /* @__PURE__ */ import_react.default.createElement("img", { className: "avatar", src: avatar, alt: "User Avatar" }), /* @__PURE__ */ import_react.default.createElement("div", { className: "contentContainer" }, /* @__PURE__ */ import_react.default.createElement("h3", { className: "username", style: { color } }, username), /* @__PURE__ */ import_react.default.createElement("div", { className: "content" }, text, imgs, attachmentElements)));
+    const { avatar, username, color, text, imgs, attachmentElements, timeout, messageId, reference } = props;
+    return /* @__PURE__ */ import_react.default.createElement(Expire, { className: "message", messageId, delay: timeout }, /* @__PURE__ */ import_react.default.createElement("img", { className: "avatar", src: avatar, alt: "User Avatar" }), /* @__PURE__ */ import_react.default.createElement("div", { className: "contentContainer" }, reference ? /* @__PURE__ */ import_react.default.createElement("p", null, reference.messageId) : null, /* @__PURE__ */ import_react.default.createElement("h3", { className: "username", style: { color } }, username), /* @__PURE__ */ import_react.default.createElement("div", { className: "content" }, text, imgs, attachmentElements)));
   }
   var Overlay_default = Overlay;
 
   // src/Routes/Interface.jsx
   var import_react2 = __toESM(require_react());
   function MBox2(props) {
-    return /* @__PURE__ */ import_react2.default.createElement("li", { key: props.messageId }, /* @__PURE__ */ import_react2.default.createElement("img", { className: "avatar", src: props.avatar }), /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("h3", { className: "username", style: { color: props.color } }, props.name), /* @__PURE__ */ import_react2.default.createElement("div", { className: "content" }, props.text, props.imgs, props.attachmentElements)));
+    console.log(props.replyMap ? props.replyMap.text : null);
+    return /* @__PURE__ */ import_react2.default.createElement("li", { key: props.messageId }, /* @__PURE__ */ import_react2.default.createElement("img", { className: "avatar", src: props.avatar }), /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: "flex", margin: 0, marginLeft: "1rem", fontSize: "0.8rem", opacity: 0.8, alignItems: "center" } }, props.replyMap ? /* @__PURE__ */ import_react2.default.createElement("h3", { style: { color: props.color, margin: 0, marginRight: "0.5rem", minWidth: "max-content" } }, props.replyMap.name) : null, props.replyMap ? /* @__PURE__ */ import_react2.default.createElement("div", { className: "reply" }, props.replyMap.text.props.children) : null), /* @__PURE__ */ import_react2.default.createElement("h3", { className: "username", style: { color: props.color } }, props.name), /* @__PURE__ */ import_react2.default.createElement("div", { className: "content" }, props.text, props.imgs, props.attachmentElements)));
   }
   function TitleBar(props) {
     function minimize(event) {
-      console.log(event);
-      console.log(window.api);
       window.api.minimize();
     }
     function close(event) {
-      console.log(event);
-      console.log(window.api);
       window.api.close();
     }
     return /* @__PURE__ */ import_react2.default.createElement("div", { id: "title" }, /* @__PURE__ */ import_react2.default.createElement("div", null, /* @__PURE__ */ import_react2.default.createElement("button", { id: "configButton", onClick: props.handleButtonClick, style: { margin: 0, width: "2.5rem", height: "1.5rem", borderRadius: "0" } }, "\u2630")), /* @__PURE__ */ import_react2.default.createElement("div", { id: "drag" }), /* @__PURE__ */ import_react2.default.createElement("div", { style: { display: "flex" } }, /* @__PURE__ */ import_react2.default.createElement("button", { onClick: window.api ? minimize : null, style: { margin: 0, width: "2.5rem", height: "1.5rem", borderRadius: "0" } }, "\u2212"), /* @__PURE__ */ import_react2.default.createElement("button", { onClick: window.api ? close : null, style: { margin: 0, width: "2.5rem", height: "1.5rem", borderRadius: "0" } }, "\u2716")));
@@ -25451,17 +25450,24 @@
       const { updatedContent, imgs } = props.handleURLs(data.cleanContent);
       const attachmentElements = props.handleAttachments(data.attachments);
       const text = props.handleText(updatedContent);
-      console.log(data);
+      const messageId = data.messageId;
+      const reference = data.reference;
+      const referenceMap = reference ? messages.find((map2) => map2["key"] === reference.messageId) : null;
+      const replyMap = reference && referenceMap ? { "name": referenceMap.props.name, "color": referenceMap.props.color, "text": referenceMap.props.text } : null;
       const newElement = /* @__PURE__ */ import_react2.default.createElement(
         MBox2,
         {
+          key: data.messageId,
           name,
           color: nickColor,
           avatar: avatarUrl,
           text,
           imgs,
           attachmentElements,
-          messageId: data.messageId
+          messageId,
+          replyMap,
+          referenceMap,
+          reference
         }
       );
       setMessages([...messages.slice(-99), newElement]);
