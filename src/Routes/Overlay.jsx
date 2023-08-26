@@ -14,6 +14,11 @@ function Overlay(props) {
     const messageId = data.messageId
     const reference = data.reference
 
+    const reply = data.reply && {
+      ...data.reply,
+      content: props.handleText(data.reply.content)
+    }
+
     const newElement = (
       <MBox
         key={messageId}
@@ -26,6 +31,7 @@ function Overlay(props) {
         timeout={10000}
         messageId={messageId}
         reference={reference}
+        reply={reply}
       />
     );
 
@@ -67,12 +73,19 @@ function Expire(props) {
 
 
 function MBox(props) {
-  const { avatar, username, color, text, imgs, attachmentElements, timeout, messageId, reference } = props;
+  const { avatar, username, color, text, imgs, attachmentElements, timeout, messageId, reply } = props;
 
   return (
     <Expire className='message' messageId={messageId} delay={timeout}>
       <img className='avatar' src={avatar} alt="User Avatar"/>
       <div className='contentContainer'>
+        {reply &&(
+          <div style={{display:'flex',margin:0, marginLeft:'1rem',fontSize:'0.8rem', opacity:0.8, alignItems:'center'}}>
+            <h3 style={{color:reply.color, margin:0, marginRight:'0.5rem', minWidth:'max-content'}}>{reply.name}</h3>
+            <div className='reply'>{reply.content}</div>
+          </div>
+          )
+        }
         <h3 className='username' style={{ color }}>{username}</h3>
         <div className='content'>
           {text}

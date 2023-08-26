@@ -46,7 +46,19 @@ class Bot{
         
         client.on(Events.MessageCreate, message =>{
             if (message.channelId != this.targetChannel) return
-            const Content = {
+            createMessageContent(message)
+        })
+
+        async function createMessageContent(message){
+            let reply = null;
+            try{
+                reply = await message.channel.messages.fetch(message.reference.messageId)
+            }
+            catch (error){
+                console.log()
+            }
+
+            const content = {
                 'authorId': message.author.id,
                 'content': message.content,
                 'cleanContent': message.cleanContent,
@@ -56,6 +68,11 @@ class Bot{
                 'color': message.member.displayHexColor,
                 'messageId': message.id,
                 'reference': message.reference,
+                'reply': reply ? {
+                    'name': reply.member.nickname ?? reply.author.username,
+                    'color': reply.member.displayHexColor,
+                    'content': reply.cleanContent
+                    } : null,
                 'attachments': message.attachments.map(
                     attachment => ({
                         "url":attachment.url,
@@ -63,14 +80,17 @@ class Bot{
                         "content_type":attachment.contentType
                     }))
             }
-            socket.emit('message', Content)
-        })
-    }
 
+            console.log(content)
+            socket.emit('message', content)
+            return content
+        }
+}
+    
     login(){
         client.login(this.token)
     }
-
+    
 }
 
 module.exports = {Bot}
