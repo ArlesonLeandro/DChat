@@ -1,6 +1,6 @@
 {
   "name": "dchat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "public/electron.js",
   "homepage": "./",
   "author": {
